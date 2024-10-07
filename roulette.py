@@ -89,11 +89,13 @@ def rules():
     input("Press enter to start the game: ")
 
 def rack_round_one(shells,blanks,lives):
+    global decide_lives_r_1
     print(shells,"shells are racked.",blanks,"shell(s) are blanks,",lives,"shell(s) are lives...")
     decide_lives_r_1 = random.randint(1,shells)
     return decide_lives_r_1
 
 def decide_target(target):
+    global decide_lives_r_1
     while True:
         if target.lower() == "s":
             if decide_lives_r_1 < 2:
@@ -116,7 +118,7 @@ def decide_target(target):
 
 def main():
     rack_round_one(3,2,1)
-    target = input("To aim at yourself press 's', to aim at dealer press 'd':")
+    target = input("To aim at yourself press 's', to aim at dealer press 'd': ")
     decide_target(target)
 
 main()
