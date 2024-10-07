@@ -1,6 +1,7 @@
 import random
 
 decide_lives_r_1 = int(0)
+player_lifes = int(2)
 
 def rules():
     print("Welcome to Python Roulette. The rules are simple.. you live, or you dont.")
@@ -19,29 +20,53 @@ def rack_round_one(shells,blanks,lives):
     global decide_lives_r_1
     print(shells,"shells are racked.",blanks,"shell(s) are blanks,",lives,"shell(s) are lives...")
     decide_lives_r_1 = random.randint(1,shells)
-    return decide_lives_r_1
+    return decide_lives_r_1, shells, blanks, lives
 
-def decide_target(target):
+def start_turn(target,shells,blanks,lives):
     global decide_lives_r_1
-    if target.lower() == "s":
-        if decide_lives_r_1 < 2:
-            print("IT WAS A LIVE ROUND! LIFE LOST!")
-        if decide_lives_r_1 > 1:
-            decide_lives_r_1 =- 1
-            print("PHEW! IT WAS A BLANK.")
-            return True
-    elif target.lower() == "d":
-        if decide_lives_r_1 < 2:
-            print("IT WAS A LIVE ROUND! DEALER DOWN!")
-        if decide_lives_r_1 > 1:
-            decide_lives_r_1 =- 1
-            print("IT WAS A BLANK! DEALERS TURN!")
+    global player_lifes
 
-        
+    if target.lower() == "s":
+        if decide_lives_r_1 == 1:
+            player_lifes -= 1
+            print("IT WAS A LIVE ROUND! Lifes remaining:",player_lifes)
+            shells -= 1
+            lives -= 1
+            return False
+        else:
+            decide_lives_r_1 -= 1
+            print("PHEW! IT WAS A BLANK.")
+            shells -= 1
+            blanks -= 1
+            return True,shells,lives
+    elif target.lower() == "d":
+        if decide_lives_r_1 == 1:
+            print("IT WAS A LIVE ROUND! DEALER DOWN!")
+            shells -= 1
+            lives -= 1
+            return False
+        else:
+            decide_lives_r_1 -= 1
+            print("IT WAS A BLANK! DEALERS TURN!")
+            shells -=1
+            blanks -= 1
+            return False
+
+def dealer_start_turn(shells,blanks,lives):
+    global decide_lives_r_1
+    print(shells)
+    print(blanks)
+    print(lives)
 
 def main():
-    rack_round_one(3,2,1)
-    decide_target()
+    shells,blanks,lives = 3,2,1
+    rack_round_one(shells,blanks,lives)
+    while True:
+        target = input("To aim at yourself press 's', to aim at dealer press 'd': ")
+        print()
+        if not start_turn(target,shells,blanks,lives):
+            break
+    dealer_start_turn(shells,blanks,lives)
 
 main()
 
